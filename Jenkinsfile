@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    TEST_ENV = 'local'
+    TEST_ENV = "local"
   }
 
   stages {
@@ -15,6 +15,8 @@ pipeline {
     stage('Start demo app container') {
       steps {
         sh '''
+          set -e
+
           docker rm -f fashionhub-demo-app || true
           docker run -d --name fashionhub-demo-app -p 4000:4000 pocketaces2/fashionhub-demo-app
 
