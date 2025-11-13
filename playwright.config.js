@@ -50,7 +50,7 @@ function resolveEnvironment() {
 
   const baseURL = ENV_URLS[envName] || ENV_URLS["prod"];
 
-  console.log(`🌍 Using environment: ${envName} → ${baseURL}`);
+  console.log(`Using environment: ${envName} → ${baseURL}`);
   return { envName, baseURL };
 }
 
