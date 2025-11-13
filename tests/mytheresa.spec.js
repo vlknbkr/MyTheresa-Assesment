@@ -1,9 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { HomePage } from "../src/pages/homePage.js";
-import { AboutPage } from "../src/pages/aboutPage.js";
-import { LoginPage } from "../src/pages/loginPage.js";
 import { GithubPrService } from "../src/services/githubPrService.js";
 import { writePrsToCsv } from "../src/utils/csvWriter.js";
+import { HomePage } from "../src/pages/HomePage.ts";
 
 test("Test Case 1: No console errors across main navigation flow", async ({ page }) => {
   const consoleErrors = [];
@@ -27,9 +25,7 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
     }
   };
 
-  const home = new HomePage(page);
-  const about = new AboutPage(page);
-  const login = new LoginPage(page);
+  const home = new HomePage(page)
 
   // Open Home page
   await home.open();
@@ -42,19 +38,19 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
   tagErrors("About");
 
   // Navigate to Login page
-  await about.clicAccountButton();
+  await home.clicAccountButton();
   await page.waitForLoadState("load");
   tagErrors("Account");
 
   // Navigate to Clothing page
-  await about.clickClotingButton();
+  await home.clickClotingButton();
   await page.waitForLoadState("load");
   tagErrors("Clothing");
 
 
 
   // Navigate to Shopping Bag page
-  await about.clickShoppingBagButton();
+  await home.clickShoppingBagButton();
   await page.waitForLoadState("load");
   tagErrors("Clothing");
 
