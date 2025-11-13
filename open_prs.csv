@@ -1,0 +1,31 @@
+title,created_at,author
+"fix: generation of all response models in case of multi method endpoints",2025-11-13T10:37:39Z,ChiragAgg5k
+"fix: enable SMTPAuth validation for SMTP settings (#9067)",2025-11-13T09:44:18Z,duvvuvenkataramana
+"Feat csv export",2025-11-13T09:37:54Z,abnegate
+"Fix operators in transactions",2025-11-11T07:22:12Z,abnegate
+"feat: Enhanced screenshot error handling and debugging",2025-11-11T05:38:09Z,vm0809
+"Update README files to match new tagline",2025-11-10T21:16:44Z,ebenezerdon
+"Add support for x-forwarded-for header in SSR scenarios",2025-11-10T15:52:15Z,alexfreeman90
+"Feat:  Git env variables suggestion",2025-11-10T15:21:35Z,Meldiron
+"refactor(account): move MFA endpoints to module actions",2025-11-10T11:57:33Z,HarshMN2345
+"Update README.md",2025-11-10T08:26:22Z,LauraDuRy
+"Added error message for the backups route",2025-11-09T06:43:37Z,ArnabChatterjee20k
+"Set proper access-control-allow-origin for OPTIONS request",2025-11-06T12:24:00Z,hmacr
+"Send email on failed deployment",2025-11-06T07:35:14Z,hmacr
+"fix: Use supported runtimes from env config",2025-11-04T06:40:31Z,hmacr
+"Feat: utopia auth",2025-11-04T06:23:05Z,lohanidamodar
+"Add TikTok OAuth provider",2025-11-03T22:08:45Z,Copilot
+"docs: add Ubuntu prerequisites for Docker installation",2025-10-30T03:44:43Z,Navadeep0007
+"Refactor Brazilian Portuguese translations and email templates",2025-10-30T03:34:40Z,feschaffa
+"fix: increase sites template deployment test timeout",2025-10-29T09:55:16Z,hmacr
+"Customize email preview and heading between Console and projects",2025-10-28T14:10:27Z,hmacr
+"feat: per bucket image transformations flag",2025-10-28T08:43:52Z,ChiragAgg5k
+"CSV import fix for spatial types",2025-10-28T08:39:37Z,ArnabChatterjee20k
+"Appwrite overall readability",2025-10-28T01:24:25Z,mishmanners
+"Feat 1we 29 : Add email templates for account change notifications",2025-10-27T11:23:14Z,bandaranaike
+"add: env var.",2025-10-26T11:15:03Z,ItzNotABug
+"feat: Add provider info to the session data for OAuth2 token auth",2025-10-22T22:38:00Z,adityaoberai
+"Refactor authorization handling across multiple modules to use the ne…",2025-10-22T13:37:49Z,shimonewman
+"POC Feat photo api",2025-10-22T09:23:41Z,eldadfux
+"docs: fix Docker command syntax in code autocompletion section",2025-10-21T05:54:21Z,JDeep1234
+"fix(users): handle null name param #8785",2025-10-16T23:52:16Z,Shobhit150
