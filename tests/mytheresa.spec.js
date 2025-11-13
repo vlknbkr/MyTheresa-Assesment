@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { GithubPrService } from "../src/services/githubPrService.js";
 import { writePrsToCsv } from "../src/utils/csvWriter.js";
 import { HomePage } from "../src/pages/HomePage.ts";
+import { LoginPage } from "../src/pages/LoginPage.ts";
 
 test("Test Case 1: No console errors across main navigation flow", async ({ page }) => {
   const consoleErrors = [];
