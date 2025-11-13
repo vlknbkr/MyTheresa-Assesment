@@ -32,7 +32,7 @@ pipeline {
     stage('Run Playwright tests') {
       steps {
         sh '''
-          npx playwright install --with-deps
+          npx playwright install
           TEST_ENV=local npx playwright test
         '''
       }
