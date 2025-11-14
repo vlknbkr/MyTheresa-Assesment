@@ -20,31 +20,46 @@ export class GithubPrService {
   }
 
   /**
-   * Fetches open pull requests from GitHub API
+   * Fetches all open pull requests from GitHub API with pagination
    */
-  async getOpenPullRequests(): Promise<PullRequestInfo[]> {
-    const url = `https://api.github.com/repos/${this.owner}/${this.repo}/pulls?state=open`;
+  async getAllOpenPullRequests(): Promise<PullRequestInfo[]> {
+    const allPullRequests: PullRequestInfo[] = [];
+    let page = 1;
 
-    const response = await this.request.get(url, {
-      headers: {
-        "User-Agent": "playwright-mytheresa-challenge", // GitHub API requires a UA header
-        Accept: "application/vnd.github+json"
+    while (true) {
+      const url = `https://api.github.com/repos/${this.owner}/${this.repo}/pulls?state=open&per_page=100&page=${page}`;
+
+      const response = await this.request.get(url, {
+        headers: {
+          "User-Agent": "playwright-mytheresa-challenge", 
+          Accept: "application/vnd.github+json"
+        }
+      });
+
+      if (response.status() !== 200) {
+        throw new Error(
+          `GitHub API error: ${response.status()} - ${await response.text()}`
+        );
       }
-    });
 
-    if (response.status() !== 200) {
-      throw new Error(
-        `GitHub API error: ${response.status()} - ${await response.text()}`
+      const data = await response.json();
+
+      if (data.length === 0) {
+        break; // Exit loop if no more PRs are returned
+      }
+
+      // Map and append PRs to the result array
+      allPullRequests.push(
+        ...(data as any[]).map((pr) => ({
+          title: pr.title,
+          createdAt: pr.created_at,
+          author: pr.user?.login ?? "unknown" 
+        }))
       );
+
+      page++; 
     }
 
-    const data = await response.json();
-
-    // Map to clean PR structure
-    return (data as any[]).map((pr) => ({
-      title: pr.title,
-      createdAt: pr.created_at,
-      author: pr.user?.login ?? "unknown" // fallback safety
-    }));
+    return allPullRequests;
   }
 }

@@ -42,4 +42,3 @@ export class BasePage {
     await this.navShoppingBag.click();
   }
 }
-
