@@ -48,12 +48,10 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
   await page.waitForLoadState("load");
   tagErrors("Clothing");
 
-
-
   // Navigate to Shopping Bag page
   await home.clickShoppingBagButton();
   await page.waitForLoadState("load");
-  tagErrors("Clothing");
+  tagErrors("ShoppingBag");
 
 
   // Console error assertion
@@ -72,8 +70,7 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
   ).toBe(0);
 });
 
-
-test("Test 2: All homepage links should return valid status codes", async ({ page, request }) => {
+test("Test 2: All links should return valid status codes", async ({ page, request }) => {
   const home = new HomePage(page);
   await home.open();
 
@@ -121,7 +118,7 @@ test("Test 3: Successful login should redirect to home or account page", async (
 
 test("Test 4:Export open PRs to CSV", async ({ request }) => {
   const service = new GithubPrService(request);
-  const prs = await service.getOpenPullRequests();
+  const prs = await service.getAllOpenPullRequests();
 
   writePrsToCsv(prs, "open_prs.csv");
 
