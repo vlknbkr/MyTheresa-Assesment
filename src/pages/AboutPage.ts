@@ -1,17 +1,29 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { ABOUT_SELECTORS } from "../locators/aboutPage.locators";
+import { RegisterSubclass } from "../core/RegisterSubclass";
 
+@RegisterSubclass("AboutPage")
 export class AboutPage extends BasePage {
   private readonly headerTitle: Locator;
-  private readonly contentContainer: Locator;
+  private readonly contentContainer: Locator;  
+  private readonly navAbout: Locator;
 
   constructor(page: Page) {
     super(page);
     this.headerTitle = page.locator(ABOUT_SELECTORS.headerTitle);
     this.contentContainer = page.locator(ABOUT_SELECTORS.contentContainer);
+    this.navAbout = page.locator(ABOUT_SELECTORS.navAbout)
+    
   }
-
+  
+  /**
+   * Overrides BasePage default header click logic.
+   * Navigates using the Home button in the header.
+   */
+  async clickHeaderItem() {
+    await this.navAbout.click();
+  }
   /**
    * Opens the About page using baseURL from Playwright config.
    */
@@ -22,7 +34,7 @@ export class AboutPage extends BasePage {
   /**
    * Returns the main heading text of the About page.
    */
-  async getHeaderText(){
+  async getHeaderText() {
     const header = this.headerTitle.first();
     if (await header.isVisible()) {
       return header.textContent();
@@ -37,7 +49,8 @@ export class AboutPage extends BasePage {
     return this.contentContainer.first().isVisible();
   }
 
-  async getPageTitle(){
+  async getPageTitle() {
     return "about page"
   }
 }
+BasePage.registerSubclass(AboutPage);

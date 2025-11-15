@@ -1,44 +1,33 @@
 import { Locator, Page } from "@playwright/test";
-import { BASE_SELECTORS } from "../locators/basePage.locators";
-
+import { PageRegistry } from "./RegisterSubclass";
 
 export class BasePage {
-  private readonly navHome: Locator;
-  private readonly navAccount: Locator;
-  private readonly navCloting: Locator;
-  private readonly navAbout: Locator;
-  private readonly navShoppingBag: Locator;
   protected readonly page: Page;
-
+  static subclasses: Function[] = [];
 
   constructor(page: Page) {
     this.page = page;
-    this.navHome = page.locator(BASE_SELECTORS.navHome);
-    this.navAccount = page.locator(BASE_SELECTORS.navAccount);
-    this.navCloting = page.locator(BASE_SELECTORS.navClothing);
-    this.navAbout = page.locator(BASE_SELECTORS.navAbout);
-    this.navShoppingBag = page.locator(BASE_SELECTORS.navShoppingBag);
+  }
+  static registerSubclass(subclass: Function) {
+    BasePage.subclasses.push(subclass);
   }
 
-  protected async goto(path: string){
-    await this.page.goto(path, {waitUntil:"load"})
+  /**
+   * Subclasses should override this to implement header navigation behavior.
+   */
+  async clickHeaderItem(_elementKey: string) {
+    throw new Error("clickHeaderElement() must be overridden in the subclass");
   }
 
-  async clickHomeButton() {
-    await this.navHome.click();
+  static create(pageName: string, page: Page) {
+    const PageClass = PageRegistry[pageName];
+    if (!PageClass) {
+      throw new Error(`Page "${pageName}" is not registered in PageRegistry.`);
+    }
+    return new PageClass(page);
   }
 
-  async clicAccountButton() {
-    await this.navAccount.click();
-  }
-
-  async clickClotingButton() {
-    await this.navCloting.click();
-  }
-  async clickAboutButton() {
-    await this.navAbout.click();
-  }
-  async clickShoppingBagButton() {
-    await this.navShoppingBag.click();
+  protected async goto(path: string) {
+    await this.page.goto(path, { waitUntil: "load" })
   }
 }
