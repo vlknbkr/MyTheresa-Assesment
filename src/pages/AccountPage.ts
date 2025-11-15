@@ -1,13 +1,16 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { LOGIN_SELECTORS } from "../locators/loginPage.locators";
+import { LOGIN_SELECTORS } from "../locators/accountPage.locators";
+import { RegisterSubclass } from "../core/RegisterSubclass";
 
-export class LoginPage extends BasePage {
+@RegisterSubclass("AccountPage")
+export class AccountPage extends BasePage {
     private readonly userNameInput: Locator;
     private readonly passwordInput: Locator;
     private readonly loginButton: Locator;
     private readonly signUpButton: Locator;
     private readonly welcomeMessage: Locator;
+    private readonly navAccount: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -15,7 +18,17 @@ export class LoginPage extends BasePage {
         this.passwordInput = page.locator(LOGIN_SELECTORS.password);
         this.loginButton = page.locator(LOGIN_SELECTORS.loginButton);
         this.signUpButton = page.locator(LOGIN_SELECTORS.signUpButton);
-        this.welcomeMessage = page.locator(LOGIN_SELECTORS.welcomeMessage);
+        this.welcomeMessage = page.locator(LOGIN_SELECTORS.welcomeMessage);    
+        this.navAccount = page.locator(LOGIN_SELECTORS.navAccount)
+        
+    }
+
+    /**
+     * Overrides BasePage default header click logic.
+     * Navigates using the Home button in the header.
+     */
+    async clickHeaderItem() {
+        await this.navAccount.click();
     }
 
     /**
@@ -63,3 +76,4 @@ export class LoginPage extends BasePage {
         await this.clickLogin();
     }
 }
+BasePage.registerSubclass(AccountPage);

@@ -45,10 +45,10 @@ export class GithubPrService {
       const data = await response.json();
 
       if (data.length === 0) {
-        break; // Exit loop if no more PRs are returned
+        break; // Exit loop if no more data return empty
       }
 
-      // Map and append PRs to the result array
+      // Add PRs to the result array
       allPullRequests.push(
         ...(data as any[]).map((pr) => ({
           title: pr.title,

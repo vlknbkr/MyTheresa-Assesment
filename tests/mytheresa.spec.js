@@ -1,80 +1,70 @@
 import { test, expect } from "@playwright/test";
 import { GithubPrService } from "../src/services/githubPrService.js";
 import { writePrsToCsv } from "../src/utils/csvWriter.js";
-import { HomePage } from "../src/pages/HomePage.ts";
-import { LoginPage } from "../src/pages/LoginPage.ts";
+import { BasePage } from "../src/core/BasePage.ts";
+import "../src/pages/HomePage.ts";
+import "../src/pages/AboutPage.ts";
+import "../src/pages/AccountPage.ts";
+import "../src/pages/ClothingPage.ts";
+import "../src/pages/ShoppingBagPage.ts";
 
 test("Test Case 1: No console errors across main navigation flow", async ({ page }) => {
   const consoleErrors = [];
+  let currentPageName = "Unknown";
 
-  // Listen globally for console errors during the whole flow
+  // console error listener 
   page.on("console", (msg) => {
     if (msg.type() === "error") {
       consoleErrors.push({
-        pageName: "unknown",
+        pageName: currentPageName,
         message: msg.text(),
+        type: msg.type(),
       });
     }
   });
 
-  // tagError to get current page name
-  const tagErrors = (pageName) => {
-    for (const err of consoleErrors) {
-      if (err.pageName === "unknown") {
-        err.pageName = pageName;
-      }
-    }
-  };
+  let index = 0;
 
-  const home = new HomePage(page)
+  for (const PageClass of BasePage.subclasses) {
+    const instance = new PageClass(page);
+    currentPageName = PageClass.name; //to get page name for logging
 
-  // Open Home page
-  await home.open();
-  await page.waitForLoadState("load");
-  tagErrors("Home");
-
-  // Navigate to About page
-  await home.clickAboutButton();
-  await page.waitForLoadState("load");
-  tagErrors("About");
-
-  // Navigate to Login page
-  await home.clicAccountButton();
-  await page.waitForLoadState("load");
-  tagErrors("Account");
-
-  // Navigate to Clothing page
-  await home.clickClotingButton();
-  await page.waitForLoadState("load");
-  tagErrors("Clothing");
-
-  // Navigate to Shopping Bag page
-  await home.clickShoppingBagButton();
-  await page.waitForLoadState("load");
-  tagErrors("ShoppingBag");
-
-
-  // Console error assertion
-  if (consoleErrors.length > 0) {
-    const formatted = consoleErrors
-      .map((e) => `[${e.pageName}] ${e.message}`)
-      .join("\n");
-    throw new Error(
-      `Console errors detected during navigation:\n${formatted}`
-    );
+    index === 0 && await instance.open(); //to control the open() for each page instance
+    await instance.clickHeaderItem(); //clicking corresponding header item
+    await page.waitForLoadState("load");
+    index++;
   }
+  const pagesWithErrors = Array.from(
+    new Set(consoleErrors.map((e) => e.pageName))
+  );
 
+  // error details for troubleshooting
+  const errorDetails = consoleErrors
+    .map((e, idx) =>
+      `${idx + 1}) [${e.pageName}] ${e.type.toUpperCase()} → ${e.message}`
+    ).join("\n");
+
+  // Final assertion
   expect(
     consoleErrors.length,
-    "No console errors should appear on any visited page"
+    [
+      "Console errors detected during navigation.",
+      "",
+      `Failing pages: ${pagesWithErrors.length > 0 ? pagesWithErrors.join(", ") : "N/A"
+      }`,
+      "",
+      "Error details:",
+      errorDetails || "None",
+      ""
+    ].join("\n")
   ).toBe(0);
 });
 
 test("Test 2: All links should return valid status codes", async ({ page, request }) => {
-  const home = new HomePage(page);
+  const home = BasePage.create("HomePage", page);
   await home.open();
 
-  const links = await home.getAllLinks();
+  const links = await home.getAllLinks();  
   links.forEach((link, index) => {
     console.log(`${index + 1}. ${link}`);
   });
@@ -91,29 +81,26 @@ test("Test 2: All links should return valid status codes", async ({ page, reques
       console.warn(`${url} -> ${status}`);
     }
   }
-
   expect(brokenLinks, `Broken links found:\n${brokenLinks.map(l => `${l.url} (${l.status})`).join("\n")}`)
     .toEqual([]);
 });
 
-
 test("Test 3: Successful login should redirect to home or account page", async ({ page }) => {
-  const login = new LoginPage(page);
-
+  const account = BasePage.create("AccountPage", page);
   // Open login page
-  await login.open();
+  await account.open();
 
   // Fill credentials (load from .env later)
-  await login.fillCredentials(process.env.USERNAME, process.env.PASSWORD);
+  await account.fillCredentials(process.env.USERNAME, process.env.PASSWORD);
 
   // Click login button
-  await login.clickLogin();
+  await account.clickLogin();
 
   // Verify login success (redirect or visible element)
   await page.waitForLoadState("load");
 
   // Welcome message expectation to check login
-  expect(await login.isWelcomeMessageVisible());
+  expect(await account.isWelcomeMessageVisible());
 });
 
 test("Test 4:Export open PRs to CSV", async ({ request }) => {

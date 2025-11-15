@@ -1,13 +1,26 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { HOME_SELECTORS } from "../locators/homePage.locators";
+import { RegisterSubclass } from "../core/RegisterSubclass";
 
+@RegisterSubclass("HomePage")
 export class HomePage extends BasePage {
   private readonly shopNowCta: Locator;
+  private readonly navHome: Locator;
+
 
   constructor(page: Page) {
     super(page);
     this.shopNowCta = page.locator(HOME_SELECTORS.ctaShopNow);
+    this.navHome = page.locator(HOME_SELECTORS.navHome)
+  }
+
+  /**
+   * Overrides BasePage default header click logic.
+   * Navigates using the Home button in the header.
+   */
+  async clickHeaderItem() {
+    await this.navHome.click();
   }
 
   /**
@@ -34,3 +47,4 @@ export class HomePage extends BasePage {
     );
   }
 }
+BasePage.registerSubclass(HomePage);
