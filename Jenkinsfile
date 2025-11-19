@@ -11,7 +11,6 @@ pipeline {
         checkout scm
       }
     }
-
     stage('Start demo app container') {
       steps {
         sh '''
@@ -57,6 +56,7 @@ pipeline {
 
   post {
     always {
+      junit 'test-results/results.xml'
       sh 'docker rm -f fashionhub-demo-app || true'
       archiveArtifacts artifacts: 'playwright-report-*/**', fingerprint: true
     }
