@@ -1,6 +1,11 @@
 pipeline {
   agent any
 
+  
+  tools {
+    nodejs 'NodeJS'
+  }
+
   environment {
     ENV = "DEV"
   }
