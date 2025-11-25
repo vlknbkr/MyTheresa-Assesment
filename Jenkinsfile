@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+      args '-u root -v /var/run/docker.sock:/var/run/docker.sock --network host'
+    }
+  }
 
   environment {
     TEST_ENV = "local"
@@ -11,6 +16,13 @@ pipeline {
         checkout scm
       }
     }
+
+    stage('Install Docker CLI') {
+      steps {
+        sh 'apt-get update && apt-get install -y docker.io'
+      }
+    }
+
     stage('Start demo app container') {
       steps {
         sh '''
