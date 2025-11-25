@@ -24,7 +24,6 @@ if (fs.existsSync(envFile)) {
 } else {
   console.warn(`Environment file ${envFile} not found.`);
 }
-
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
@@ -50,6 +49,7 @@ export default defineConfig({
     headless: true,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    
   },
 
   /* Configure projects for major browsers */
