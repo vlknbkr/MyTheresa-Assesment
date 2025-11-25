@@ -12,6 +12,21 @@ pipeline {
       }
     }
 
+    stage('Debug Environment') {
+      steps {
+        sh '''
+          echo "User: $(whoami)"
+          echo "PATH: $PATH"
+          uname -a
+          if [ -f /etc/os-release ]; then
+            cat /etc/os-release
+          fi
+          ls -l /usr/local/bin/docker || echo "Docker not found in /usr/local/bin"
+          which docker || echo "Docker not in PATH"
+        '''
+      }
+    }
+
     stage('Start demo app container') {
       steps {
         sh '''
