@@ -38,7 +38,6 @@ pipeline {
             --network jenkins-net \
             -p 4000:4000 \
             pocketaces2/fashionhub-demo-app
-            docker network connect jenkins-net ashionhub-demo-app
 
           echo "Waiting for the demo app to be ready..."
           i=0
