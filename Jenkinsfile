@@ -72,6 +72,7 @@ pipeline {
     stage('Run Playwright tests') {
       steps {
         sh '''
+          mkdir -p test-results
           npx playwright install --with-deps
           ENV=DEV npx playwright test --reporter=junit
         '''
