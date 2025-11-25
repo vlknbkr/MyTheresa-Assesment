@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
-      args '-u root -v /var/run/docker.sock:/var/run/docker.sock --network host'
-    }
-  }
+  agent any
 
   environment {
     PATH = "/usr/local/bin:$PATH"
@@ -14,12 +9,6 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
-      }
-    }
-
-    stage('Install Docker CLI') {
-      steps {
-        sh 'apt-get update && apt-get install -y docker.io'
       }
     }
 
