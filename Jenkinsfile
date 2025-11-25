@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    PATH = "/usr/local/bin:$PATH"
+    PATH = "${WORKSPACE}/docker:$PATH"
   }
 
   stages {
@@ -12,17 +12,15 @@ pipeline {
       }
     }
 
-    stage('Debug Environment') {
+    stage('Setup Docker') {
       steps {
         sh '''
-          echo "User: $(whoami)"
-          echo "PATH: $PATH"
-          uname -a
-          if [ -f /etc/os-release ]; then
-            cat /etc/os-release
+          if [ ! -f docker/docker ]; then
+            mkdir -p docker
+            echo "Downloading Docker for aarch64..."
+            curl -fsSL https://download.docker.com/linux/static/stable/aarch64/docker-27.3.1.tgz | tar xz --strip-components=1 -C docker
           fi
-          ls -l /usr/local/bin/docker || echo "Docker not found in /usr/local/bin"
-          which docker || echo "Docker not in PATH"
+          docker --version
         '''
       }
     }
