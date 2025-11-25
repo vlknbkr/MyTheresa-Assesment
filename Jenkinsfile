@@ -74,7 +74,7 @@ pipeline {
         sh '''
           mkdir -p test-results
           npx playwright install --with-deps
-          ENV=DEV npx playwright test --reporter=junit
+          ENV=DEV npx playwright test 
         '''
       }
     }
