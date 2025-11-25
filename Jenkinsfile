@@ -6,6 +6,10 @@ pipeline {
     }
   }
 
+  environment {
+    PATH = "/usr/local/bin:$PATH"
+  }
+
   stages {
     stage('Checkout') {
       steps {
