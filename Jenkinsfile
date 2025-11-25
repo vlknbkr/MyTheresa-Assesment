@@ -2,12 +2,14 @@ pipeline {
   agent any
 
   environment {
-    ENV = "DEV"
+    TEST_ENV = "local"
   }
 
   stages {
+
     stage('Checkout') {
       steps {
+        deleteDir()
         checkout scm
       }
     }
@@ -27,25 +29,27 @@ pipeline {
         sh '''
           set -e
 
-          echo "Stopping previous container..."
+          echo "Stopping any existing demo app container..."
           docker rm -f fashionhub-demo-app || true
 
-          echo "Starting demo app..."
-          docker run -d --name fashionhub-demo-app \
+          echo "Starting demo app on the shared Docker network..."
+          docker run -d \
+            --name fashionhub-demo-app \
             --network jenkins-net \
+            -p 4000:4000 \
             pocketaces2/fashionhub-demo-app
 
-          echo "Waiting for app..."
+          echo "Waiting for the demo app to be ready..."
           for i in {1..30}; do
             if curl -sSf http://fashionhub-demo-app:4000/fashionhub/ > /dev/null; then
-              echo "App is ready!"
+              echo "Demo app is READY!"
               exit 0
             fi
-            echo "Retry $i/30..."
+            echo "App not ready yet... retry $i/30..."
             sleep 2
           done
 
-          echo "App failed to start."
+          echo "Demo app did NOT become ready!"
           docker logs fashionhub-demo-app
           exit 1
         '''
@@ -54,17 +58,15 @@ pipeline {
 
     stage('Install dependencies') {
       steps {
-        sh '''
-          npm ci
-        '''
+        sh 'npm ci'
       }
     }
 
     stage('Run Playwright tests') {
       steps {
         sh '''
-          npx playwright install
-          ENV=DEV npx playwright test --reporter=junit
+          npx playwright install --with-deps
+          TEST_ENV=local npx playwright test --reporter=junit
         '''
       }
     }
@@ -75,10 +77,10 @@ pipeline {
       echo "Collecting test results..."
       junit '**/results.xml'
 
-      echo "Cleaning up..."
+      echo "Cleaning up environment..."
       sh 'docker rm -f fashionhub-demo-app || true'
 
-      echo "Archiving Playwright reports..."
+      echo "Archiving reports..."
       archiveArtifacts artifacts: 'playwright-report-*/**', fingerprint: true
     }
   }
