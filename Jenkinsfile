@@ -37,17 +37,16 @@ pipeline {
           echo "Stopping any existing demo app container..."
           docker rm -f fashionhub-demo-app || true
 
-          echo "Starting demo app on the shared Docker network..."
+          echo "Starting demo app attached to Jenkins network..."
           docker run -d \
             --name fashionhub-demo-app \
-            --network jenkins-net \
-            -p 4000:4000 \
+            --network container:jenkins \
             pocketaces2/fashionhub-demo-app
 
           echo "Waiting for the demo app to be ready..."
           i=0
           while [ $i -lt 30 ]; do
-            if curl -sSf http://fashionhub-demo-app:4000/fashionhub/ > /dev/null; then
+            if curl -sSf http://localhost:4000/fashionhub/ > /dev/null; then
               echo "Demo app is READY!"
               exit 0
             fi
