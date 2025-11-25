@@ -1,30 +1,25 @@
 pipeline {
-  agent {
-    docker {
-      image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
-      args '-u root -v /var/run/docker.sock:/var/run/docker.sock --network host'
-    }
-  }
+  agent any
+
   environment {
     TEST_ENV = "local"
   }
+
   stages {
     stage('Checkout') {
       steps {
         checkout scm
       }
     }
-    stage('Install Docker CLI') {
-      steps {
-        sh 'apt-get update && apt-get install -y docker.io'
-      }
-    }
+
     stage('Start demo app container') {
       steps {
         sh '''
           set -e
+
           docker rm -f fashionhub-demo-app || true
           docker run -d --name fashionhub-demo-app -p 4000:4000 pocketaces2/fashionhub-demo-app
+
           echo "Waiting for fashionhub app to be ready..."
           for i in {1..30}; do
             if curl -sSf http://localhost:4000/fashionhub/ > /dev/null; then
@@ -34,12 +29,14 @@ pipeline {
             echo "App not ready yet, retry $i/30..."
             sleep 2
           done
+
           echo "App did not become ready in time"
           docker logs fashionhub-demo-app || true
           exit 1
         '''
       }
     }
+
     stage('Install dependencies') {
       steps {
         sh '''
@@ -47,6 +44,7 @@ pipeline {
         '''
       }
     }
+
     stage('Run Playwright tests') {
       steps {
         sh '''
@@ -56,6 +54,7 @@ pipeline {
       }
     }
   }
+
   post {
     always {
       junit 'test-results/results.xml'
