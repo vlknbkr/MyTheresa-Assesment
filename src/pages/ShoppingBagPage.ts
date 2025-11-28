@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { CART_SELECTORS } from "../locators/shoppingCartPage.locators";
+import { CART_SELECTORS } from "../locators/shoppingCartPage.locators.ts";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("ShoppingBagPage")
@@ -29,13 +29,6 @@ export class ShoppingCartPage extends BasePage {
      */
     async open() {
         await this.goto("cart.html");
-    }
-
-    /** 
-    * Attempt to proceed to checkout  
-    */
-    async proceedToCheckout() {
-        await this.checkoutButton.first().click();
     }
 }
 

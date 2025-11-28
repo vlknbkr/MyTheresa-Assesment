@@ -9,6 +9,10 @@ pipeline {
   environment {
     ENV = "DEV"
   }
+  parameters {
+    choice(name: 'ENV', choices: ['DEV', 'QA', 'PROD'], description: 'Environment to run tests against'),
+    choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Browser to run tests against')
+  }
 
   stages {
     stage('Checkout') {
