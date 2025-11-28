@@ -74,9 +74,9 @@ pipeline {
           npx playwright install --with-deps
           
           if [ "$BROWSER" = "all" ]; then
-            ENV=DEV npx playwright test
+            ENV=$ENV npx playwright test
           else
-            ENV=DEV npx playwright test --project=$BROWSER
+            ENV=$ENV npx playwright test --project=$BROWSER
           fi
         '''
       }
