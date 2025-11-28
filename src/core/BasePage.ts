@@ -1,22 +1,26 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { PageRegistry } from "./RegisterSubclass";
 
 export class BasePage {
   protected readonly page: Page;
-  static subclasses: Function[] = [];
+  static subclasses: Array<new (page: Page) => BasePage> = [];
 
   constructor(page: Page) {
     this.page = page;
   }
-  static registerSubclass(subclass: Function) {
+  static registerSubclass(subclass: new (page: Page) => BasePage) {
     BasePage.subclasses.push(subclass);
   }
 
   /**
    * Subclasses should override this to implement header navigation behavior.
    */
-  async clickHeaderItem(_elementKey: string) {
+  async clickHeaderItem(_elementKey?: string) {
     throw new Error("clickHeaderElement() must be overridden in the subclass");
+  }
+
+  async open() {
+    throw new Error("open() must be overridden in the subclass");
   }
 
   static create(pageName: string, page: Page) {

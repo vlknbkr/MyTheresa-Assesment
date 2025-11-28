@@ -1,8 +1,17 @@
 pipeline {
   agent any
 
+  
+  tools {
+    nodejs 'NodeJS'
+  }
+
   environment {
-    TEST_ENV = "local"
+    ENV = "DEV"
+  }
+  parameters {
+    choice(name: 'ENV', choices: ['DEV', 'QA', 'PROD'], description: 'Environment to run tests against')
+    choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Browser to run tests against')
   }
 
   stages {
@@ -11,26 +20,45 @@ pipeline {
         checkout scm
       }
     }
+
+    stage('Verify Docker') {
+      steps {
+        sh '''
+          echo "Checking Docker availability..."
+          docker --version
+          docker ps
+        '''
+      }
+    }
+
     stage('Start demo app container') {
       steps {
         sh '''
           set -e
 
+          echo "Stopping any existing demo app container..."
           docker rm -f fashionhub-demo-app || true
-          docker run -d --name fashionhub-demo-app -p 4000:4000 pocketaces2/fashionhub-demo-app
 
-          echo "Waiting for fashionhub app to be ready..."
-          for i in {1..30}; do
+          echo "Starting demo app attached to Jenkins network..."
+          docker run -d \
+            --name fashionhub-demo-app \
+            --network container:jenkins \
+            pocketaces2/fashionhub-demo-app
+
+          echo "Waiting for the demo app to be ready..."
+          i=0
+          while [ $i -lt 30 ]; do
             if curl -sSf http://localhost:4000/fashionhub/ > /dev/null; then
-              echo "App is up!"
+              echo "Demo app is READY!"
               exit 0
             fi
-            echo "App not ready yet, retry $i/30..."
+            echo "App not ready yet... retry $i/30..."
             sleep 2
+            i=$((i+1))
           done
 
-          echo "App did not become ready in time"
-          docker logs fashionhub-demo-app || true
+          echo "Demo app did NOT become ready!"
+          docker logs fashionhub-demo-app
           exit 1
         '''
       }
@@ -38,17 +66,16 @@ pipeline {
 
     stage('Install dependencies') {
       steps {
-        sh '''
-          npm ci
-        '''
+        sh 'npm ci'
       }
     }
 
     stage('Run Playwright tests') {
       steps {
         sh '''
-          npx playwright install
-          TEST_ENV=local npx playwright test
+          mkdir -p test-results
+          npx playwright install --with-deps
+          ENV=DEV npx playwright test 
         '''
       }
     }
@@ -56,8 +83,13 @@ pipeline {
 
   post {
     always {
-      junit 'test-results/results.xml'
+      echo "Collecting test results..."
+      junit '**/results.xml'
+
+      echo "Cleaning up environment..."
       sh 'docker rm -f fashionhub-demo-app || true'
+
+      echo "Archiving reports..."
       archiveArtifacts artifacts: 'playwright-report-*/**', fingerprint: true
     }
   }

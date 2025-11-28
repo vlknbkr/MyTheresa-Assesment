@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { LOGIN_SELECTORS } from "../locators/accountPage.locators";
+import { LOGIN_SELECTORS } from "../locators/accountPage.locators.ts";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("AccountPage")
@@ -18,9 +18,9 @@ export class AccountPage extends BasePage {
         this.passwordInput = page.locator(LOGIN_SELECTORS.password);
         this.loginButton = page.locator(LOGIN_SELECTORS.loginButton);
         this.signUpButton = page.locator(LOGIN_SELECTORS.signUpButton);
-        this.welcomeMessage = page.locator(LOGIN_SELECTORS.welcomeMessage);    
+        this.welcomeMessage = page.locator(LOGIN_SELECTORS.welcomeMessage);
         this.navAccount = page.locator(LOGIN_SELECTORS.navAccount)
-        
+
     }
 
     /**

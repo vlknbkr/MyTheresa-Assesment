@@ -1,27 +1,34 @@
 title,created_at,author
-"Update deploymentId in sites rule for first deployment",2025-11-14T15:15:55Z,hmacr
-"chore: update framework lib to 0.33.29",2025-11-14T08:24:50Z,ChiragAgg5k
+"Support query limit and offset in list repos API",2025-11-28T07:12:58Z,hmacr
+"feat: add trusted headers variables and setup enhanced getIP",2025-11-27T12:08:46Z,levivannoort
+"Refactor auth single instance",2025-11-26T15:12:19Z,shimonewman
+"Backend changes for project-specific roles",2025-11-25T07:12:31Z,hmacr
+"Improve error page styling with interactive button states",2025-11-24T18:11:16Z,mayurshetty100
+"Fix: Implement mandatory authentication check for Custom SMTP configuration",2025-11-24T17:42:51Z,VijaykumarPujar-tech
+"WIP: Separate specifications",2025-11-24T14:47:38Z,Meldiron
+"Create pull request with tests",2025-11-23T22:18:43Z,eldadfux
+"Improve SMTP error logging in development",2025-11-22T00:47:08Z,po0mpomm
+"Fix: Prevent console freeze on large collections (#10809)",2025-11-19T12:47:47Z,suman-X
+"refactor(builds): remove queue magic",2025-11-18T18:56:07Z,loks0n
+"cached documents list",2025-11-18T14:32:16Z,shimonewman
+"Feat docker geo",2025-11-17T01:18:00Z,lohanidamodar
 "fix: enable SMTPAuth validation for SMTP settings (#9067)",2025-11-13T09:44:18Z,duvvuvenkataramana
 "feat: Enhanced screenshot error handling and debugging",2025-11-11T05:38:09Z,vm0809
 "Update README files to match new tagline",2025-11-10T21:16:44Z,ebenezerdon
-"refactor(account): move MFA endpoints to module actions",2025-11-10T11:57:33Z,HarshMN2345
 "Update README.md",2025-11-10T08:26:22Z,LauraDuRy
 "Set proper access-control-allow-origin for OPTIONS request",2025-11-06T12:24:00Z,hmacr
 "Send email on failed deployment",2025-11-06T07:35:14Z,hmacr
 "fix: Use supported runtimes from env config",2025-11-04T06:40:31Z,hmacr
-"Feat: utopia auth",2025-11-04T06:23:05Z,lohanidamodar
 "Add TikTok OAuth provider",2025-11-03T22:08:45Z,Copilot
 "docs: add Ubuntu prerequisites for Docker installation",2025-10-30T03:44:43Z,Navadeep0007
 "Refactor Brazilian Portuguese translations and email templates",2025-10-30T03:34:40Z,feschaffa
 "fix: increase sites template deployment test timeout",2025-10-29T09:55:16Z,hmacr
 "Customize email preview and heading between Console and projects",2025-10-28T14:10:27Z,hmacr
-"feat: per bucket image transformations flag",2025-10-28T08:43:52Z,ChiragAgg5k
 "CSV import fix for spatial types",2025-10-28T08:39:37Z,ArnabChatterjee20k
 "Appwrite overall readability",2025-10-28T01:24:25Z,mishmanners
 "Feat 1we 29 : Add email templates for account change notifications",2025-10-27T11:23:14Z,bandaranaike
 "add: env var.",2025-10-26T11:15:03Z,ItzNotABug
 "feat: Add provider info to the session data for OAuth2 token auth",2025-10-22T22:38:00Z,adityaoberai
-"Refactor authorization handling across multiple modules to use the ne…",2025-10-22T13:37:49Z,shimonewman
 "POC Feat photo api",2025-10-22T09:23:41Z,eldadfux
 "docs: fix Docker command syntax in code autocompletion section",2025-10-21T05:54:21Z,JDeep1234
 "fix(users): handle null name param #8785",2025-10-16T23:52:16Z,Shobhit150
@@ -147,7 +154,6 @@ title,created_at,author
 "example: compose files",2024-10-09T10:20:00Z,TorstenDittmann
 "Adds state parameter to OAuth2 flow",2024-10-09T00:49:17Z,gepd
 "Replace expectException with try/catch",2024-10-03T10:22:11Z,vermakhushboo
-"Feat docker geo",2024-10-02T09:26:28Z,lohanidamodar
 "feat(oauth): implement figma provider integration",2024-10-01T16:56:13Z,albnunes
 "Feat: PHP Stan code analysis",2024-09-27T15:16:19Z,Meldiron
 "Fix: unwanted logs & outbound issues",2024-09-20T11:04:57Z,Meldiron
@@ -155,7 +161,6 @@ title,created_at,author
 "Replace sleep with await method in functions",2024-09-18T22:15:19Z,vermakhushboo
 "Refactor: Update Vietnamese translations",2024-08-13T15:54:22Z,Hung-00
 "Feat enum statuses",2024-08-02T20:18:15Z,byawitz
-"Implement MFA Emails for authenticator creation and deletion",2024-08-02T04:28:21Z,PineappleIOnic
 "updated the mobile platform",2024-08-01T17:18:29Z,EswaramoorthyS
 "Db project by region",2024-07-30T15:37:16Z,shimonewman
 "Avoid adding default storage permission for console user",2024-07-16T16:55:43Z,Souptik2001

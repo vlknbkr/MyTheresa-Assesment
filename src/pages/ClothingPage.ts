@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { CLOTHING_SELECTORS } from "../locators/clothingPage.locators";
+import { CLOTHING_SELECTORS } from "../locators/clothingPage.locators.ts";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("ClothingPage")
@@ -23,32 +23,21 @@ export class ClothingPage extends BasePage {
     * Navigates using the Home button in the header.
     */
     async clickHeaderItem() {
-        await this.navClothing.click();
+        this.navClothing.click();
     }
 
     /**
      * Opens the clothing page using baseURL from Playwright config.
      */
     async open() {
-        await this.goto("clothing.html");
+        this.goto("clothing.html");
     }
 
     /**
      * Returns visible product count
      */
     async getProductCount() {
-        return await this.productCards.count();
-    }
-
-    /**
-     * Returns the title text of the page
-     */
-    async getHeaderText() {
-        const el = this.headerTitle.first();
-        if (await el.isVisible()) {
-            return el.textContent();
-        }
-        return null;
+        return this.productCards.count();
     }
 }
 
