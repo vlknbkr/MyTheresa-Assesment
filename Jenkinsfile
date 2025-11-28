@@ -6,12 +6,9 @@ pipeline {
     nodejs 'NodeJS'
   }
 
-  environment {
-    ENV = "DEV"
-  }
   parameters {
     choice(name: 'ENV', choices: ['DEV', 'QA', 'PROD'], description: 'Environment to run tests against')
-    choice(name: 'BROWSER', choices: ['chromium', 'firefox', 'webkit'], description: 'Browser to run tests against')
+    choice(name: 'BROWSER', choices: ['all', 'chromium', 'firefox', 'webkit'], description: 'Browser to run tests against')
   }
 
   stages {
@@ -75,7 +72,12 @@ pipeline {
         sh '''
           mkdir -p test-results
           npx playwright install --with-deps
-          ENV=DEV npx playwright test 
+          
+          if [ "$BROWSER" = "all" ]; then
+            ENV=DEV npx playwright test
+          else
+            ENV=DEV npx playwright test --project=$BROWSER
+          fi
         '''
       }
     }
