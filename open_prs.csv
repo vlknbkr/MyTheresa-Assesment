@@ -1,5 +1,4 @@
 title,created_at,author
-"Support query limit and offset in list repos API",2025-11-28T07:12:58Z,hmacr
 "feat: add trusted headers variables and setup enhanced getIP",2025-11-27T12:08:46Z,levivannoort
 "Refactor auth single instance",2025-11-26T15:12:19Z,shimonewman
 "Backend changes for project-specific roles",2025-11-25T07:12:31Z,hmacr

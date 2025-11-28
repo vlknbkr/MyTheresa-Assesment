@@ -42,7 +42,10 @@ It is designed for professional E2E test development, CI/CD execution, and multi
     AboutPage.ts
     ...
 /tests
-  mytheresa.spec.js
+  navigation.spec.ts
+  links.spec.ts
+  login.spec.ts
+  githubPrs.spec.ts
 /playwright-report
 /​environment files (.env.production, .env.development, .env.staging)
 ```

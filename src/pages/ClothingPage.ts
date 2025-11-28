@@ -5,14 +5,12 @@ import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("ClothingPage")
 export class ClothingPage extends BasePage {
-    private readonly headerTitle: Locator;
     private readonly productCards: Locator;
     private readonly navClothing: Locator;
 
 
     constructor(page: Page) {
         super(page);
-        this.headerTitle = page.locator(CLOTHING_SELECTORS.headerTitle);
         this.productCards = page.locator(CLOTHING_SELECTORS.productCards);
         this.navClothing = page.locator(CLOTHING_SELECTORS.navClothing)
 
