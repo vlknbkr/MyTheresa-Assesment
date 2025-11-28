@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { CART_SELECTORS } from "../locators/shoppingCartPage.locators.ts";
+import { CART_SELECTORS } from "../locators/shoppingCartPage.locators";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("ShoppingBagPage")

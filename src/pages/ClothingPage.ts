@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { CLOTHING_SELECTORS } from "../locators/clothingPage.locators.ts";
+import { CLOTHING_SELECTORS } from "../locators/clothingPage.locators";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("ClothingPage")

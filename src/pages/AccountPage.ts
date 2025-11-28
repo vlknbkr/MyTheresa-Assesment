@@ -1,6 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
-import { LOGIN_SELECTORS } from "../locators/accountPage.locators.ts";
+import { LOGIN_SELECTORS } from "../locators/accountPage.locators";
 import { RegisterSubclass } from "../core/RegisterSubclass";
 
 @RegisterSubclass("AccountPage")
