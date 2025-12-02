@@ -24,22 +24,21 @@ export class AccountPage extends BasePage {
 
     }
 
-    /**
-     * Overrides BasePage default header click logic.
-     * Navigates using the Home button in the header.
-     */
+    //Overrides BasePage default header click logic.
+    //Navigates using the Home button in the header.
     async clickHeaderItem() {
         await this.navAccount.click();
     }
 
-    /**
-     * Opens the login page using baseURL from Playwright config.
-     */
+    //Opens the login page using baseURL from Playwright config.
     async open() {
         await this.goto("login.html");
     }
 
+
     /**
+     * @param username
+     * @param password
      * Fills in username and password fields.
      */
     async fillCredentials(username: string, password: string) {
@@ -47,27 +46,22 @@ export class AccountPage extends BasePage {
         await this.passwordInput.fill(password);
     }
 
-    /**
-     * Clicks the "Login" button.
-     */
+    //Clicks the "Login" button.
     async clickLogin() {
         await this.loginButton.click();
     }
 
-    /**
-     * Clicks the "Sign Up" button.
-     */
+    //Clicks the "Sign Up" button.
     async clickSignUp() {
         await this.signUpButton.click();
     }
 
-    /**
-    * is the "Logout" button visible
-    */
+    //is the "Logout" button visible
     async isWelcomeMessageVisible() {
         return await this.welcomeMessage.isVisible();
     }
 
+    //is the "Logout" button visible
     async isErrorMessageVisible() {
         return await this.errorMessage.isVisible();
     }
