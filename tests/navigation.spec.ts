@@ -12,19 +12,15 @@ interface ConsoleError {
     type: string;
 }
 
+
 test("Test Case 1: No console errors across main navigation flow", async ({ page }) => {
     const consoleErrors: ConsoleError[] = [];
     let currentPageName = "Unknown";
 
-    // console error listener 
-    // console error listener 
+    // Open the console error listener 
     page.on("console", (msg) => {
         if (msg.type() === "error") {
             const text = msg.text();
-            // Ignore intentional error on AboutPage
-            if (text.includes("This is an intentional error message!")) {
-                return;
-            }
             consoleErrors.push({
                 pageName: currentPageName,
                 message: text,
@@ -33,7 +29,7 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
         }
     });
 
-    const pages = [
+    const pages: BasePage[] = [
         new HomePage(page),
         new AboutPage(page),
         new AccountPage(page),
@@ -41,15 +37,18 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
         new ShoppingCartPage(page)
     ];
 
-    let index = 0;
+    // Initial load
+    await test.step("Start Navigation Session", async () => {
+        await pages[0].open();
+    });
 
     for (const instance of pages) {
-        currentPageName = instance.constructor.name; //to get page name for logging
+        currentPageName = instance.constructor.name;
 
-        index === 0 && await instance.open(); //to control the open() for each page instance
-        await instance.clickHeaderItem(); //clicking corresponding header item
-        await page.waitForLoadState("load");
-        index++;
+        await test.step(`Navigate to ${currentPageName}`, async () => {
+            await instance.clickHeaderItem();
+            await page.waitForLoadState("load");
+        });
     }
     const pagesWithErrors = Array.from(
         new Set(consoleErrors.map((e) => e.pageName))
