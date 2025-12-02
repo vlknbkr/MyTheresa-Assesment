@@ -1,21 +1,20 @@
-import { test, expect } from "@playwright/test";
-import { BasePage } from "../src/core/BasePage";
-import "../src/pages/AccountPage";
+import { test, expect } from "../src/fixtures/fixtures";
 
-test("Test 3: Successful login should redirect to home or account page", async ({ page }) => {
-    const account = BasePage.create("AccountPage", page);
-    // Open login page
-    await account.open();
+[
+    { testname: "Wrong Username", username: "test", password: "fashion123", isErrorMessageDisplayed: true },
+    { testname: "Wrong Password", username: "demouser", password: "wrongPassword", isErrorMessageDisplayed: true },
+    { testname: "Successful Login", username: "demouser", password: "fashion123", isErrorMessageDisplayed: false },
+].forEach(({ testname, username, password, isErrorMessageDisplayed }) => {
+    test(`Test 3: login test - ${testname}`, async ({ accountPage }) => {
+        await accountPage.open();
+        await accountPage.fillCredentials(username, password);
+        await accountPage.clickLogin();
+        if (isErrorMessageDisplayed) {
+            expect(await accountPage.isErrorMessageVisible()).toBeTruthy();
+        } else {
+            expect(await accountPage.isWelcomeMessageVisible()).toBeTruthy();
+        }
+    });
+})
 
-    // Fill credentials (load from .env later)
-    await account.fillCredentials(process.env.USERNAME!, process.env.PASSWORD!);
 
-    // Click login button
-    await account.clickLogin();
-
-    // Verify login success (redirect or visible element)
-    await page.waitForLoadState("load");
-
-    // Welcome message expectation to check login
-    expect(await account.isWelcomeMessageVisible()).toBe(true);
-});

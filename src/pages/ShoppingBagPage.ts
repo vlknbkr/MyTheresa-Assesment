@@ -1,9 +1,7 @@
 import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { CART_SELECTORS } from "../locators/shoppingCartPage.locators";
-import { RegisterSubclass } from "../core/RegisterSubclass";
 
-@RegisterSubclass("ShoppingBagPage")
 export class ShoppingCartPage extends BasePage {
     private readonly checkoutButton: Locator;
     private readonly navShoppingBag: Locator;
@@ -31,5 +29,3 @@ export class ShoppingCartPage extends BasePage {
         await this.goto("cart.html");
     }
 }
-
-BasePage.registerSubclass(ShoppingCartPage);

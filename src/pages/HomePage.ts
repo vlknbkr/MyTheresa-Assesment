@@ -1,9 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { HOME_SELECTORS } from "../locators/homePage.locators";
-import { RegisterSubclass } from "../core/RegisterSubclass";
 
-@RegisterSubclass("HomePage")
+
 export class HomePage extends BasePage {
   private readonly shopNowCta: Locator;
   private readonly navHome: Locator;
@@ -47,4 +46,4 @@ export class HomePage extends BasePage {
     );
   }
 }
-BasePage.registerSubclass(HomePage);
+

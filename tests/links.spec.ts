@@ -1,12 +1,9 @@
-import { test, expect } from "@playwright/test";
-import { BasePage } from "../src/core/BasePage";
-import "../src/pages/HomePage";
+import { test, expect } from "../src/fixtures/fixtures";
 
-test("Test 2: All links should return valid status codes", async ({ page, request }) => {
-    const home = BasePage.create("HomePage", page);
-    await home.open();
+test("Test 2: All links should return valid status codes", async ({ homePage, request }) => {
+    await homePage.open();
 
-    const links = await home.getAllLinks();
+    const links = await homePage.getAllLinks();
     links.forEach((link: string, index: number) => {
         console.log(`${index + 1}. ${link}`);
     });

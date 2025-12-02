@@ -1,15 +1,12 @@
 import { Page } from "@playwright/test";
-import { PageRegistry } from "./RegisterSubclass";
+
 
 export class BasePage {
   protected readonly page: Page;
-  static subclasses: Array<new (page: Page) => BasePage> = [];
+
 
   constructor(page: Page) {
     this.page = page;
-  }
-  static registerSubclass(subclass: new (page: Page) => BasePage) {
-    BasePage.subclasses.push(subclass);
   }
 
   /**
@@ -21,14 +18,6 @@ export class BasePage {
 
   async open() {
     throw new Error("open() must be overridden in the subclass");
-  }
-
-  static create(pageName: string, page: Page) {
-    const PageClass = PageRegistry[pageName];
-    if (!PageClass) {
-      throw new Error(`Page "${pageName}" is not registered in PageRegistry.`);
-    }
-    return new PageClass(page);
   }
 
   protected async goto(path: string) {

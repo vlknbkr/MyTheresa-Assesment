@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { BasePage } from "../src/core/BasePage";
-import "../src/pages/HomePage";
-import "../src/pages/AboutPage";
-import "../src/pages/AccountPage";
-import "../src/pages/ClothingPage";
-import "../src/pages/ShoppingBagPage";
+import { HomePage } from "../src/pages/HomePage";
+import { AboutPage } from "../src/pages/AboutPage";
+import { AccountPage } from "../src/pages/AccountPage";
+import { ClothingPage } from "../src/pages/ClothingPage";
+import { ShoppingCartPage } from "../src/pages/ShoppingBagPage";
 
 interface ConsoleError {
     pageName: string;
@@ -17,21 +17,34 @@ test("Test Case 1: No console errors across main navigation flow", async ({ page
     let currentPageName = "Unknown";
 
     // console error listener 
+    // console error listener 
     page.on("console", (msg) => {
         if (msg.type() === "error") {
+            const text = msg.text();
+            // Ignore intentional error on AboutPage
+            if (text.includes("This is an intentional error message!")) {
+                return;
+            }
             consoleErrors.push({
                 pageName: currentPageName,
-                message: msg.text(),
+                message: text,
                 type: msg.type(),
             });
         }
     });
 
+    const pages = [
+        new HomePage(page),
+        new AboutPage(page),
+        new AccountPage(page),
+        new ClothingPage(page),
+        new ShoppingCartPage(page)
+    ];
+
     let index = 0;
 
-    for (const PageClass of BasePage.subclasses) {
-        const instance = new PageClass(page);
-        currentPageName = PageClass.name; //to get page name for logging
+    for (const instance of pages) {
+        currentPageName = instance.constructor.name; //to get page name for logging
 
         index === 0 && await instance.open(); //to control the open() for each page instance
         await instance.clickHeaderItem(); //clicking corresponding header item

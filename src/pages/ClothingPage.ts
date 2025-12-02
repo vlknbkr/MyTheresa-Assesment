@@ -1,9 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { CLOTHING_SELECTORS } from "../locators/clothingPage.locators";
-import { RegisterSubclass } from "../core/RegisterSubclass";
 
-@RegisterSubclass("ClothingPage")
+
 export class ClothingPage extends BasePage {
     private readonly headerTitle: Locator;
     private readonly productCards: Locator;
@@ -41,4 +40,4 @@ export class ClothingPage extends BasePage {
     }
 }
 
-BasePage.registerSubclass(ClothingPage);
+

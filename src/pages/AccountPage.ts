@@ -1,15 +1,15 @@
 import { Page, Locator } from "@playwright/test";
 import { BasePage } from "../core/BasePage";
 import { LOGIN_SELECTORS } from "../locators/accountPage.locators";
-import { RegisterSubclass } from "../core/RegisterSubclass";
 
-@RegisterSubclass("AccountPage")
+
 export class AccountPage extends BasePage {
     private readonly userNameInput: Locator;
     private readonly passwordInput: Locator;
     private readonly loginButton: Locator;
     private readonly signUpButton: Locator;
     private readonly welcomeMessage: Locator;
+    private readonly errorMessage: Locator;
     private readonly navAccount: Locator;
 
     constructor(page: Page) {
@@ -19,6 +19,7 @@ export class AccountPage extends BasePage {
         this.loginButton = page.locator(LOGIN_SELECTORS.loginButton);
         this.signUpButton = page.locator(LOGIN_SELECTORS.signUpButton);
         this.welcomeMessage = page.locator(LOGIN_SELECTORS.welcomeMessage);
+        this.errorMessage = page.locator(LOGIN_SELECTORS.errorMessage);
         this.navAccount = page.locator(LOGIN_SELECTORS.navAccount)
 
     }
@@ -67,13 +68,8 @@ export class AccountPage extends BasePage {
         return await this.welcomeMessage.isVisible();
     }
 
-    /**
-     * Performs a full login flow.
-     */
-    async login(username: string, password: string) {
-        await this.open();
-        await this.fillCredentials(username, password);
-        await this.clickLogin();
+    async isErrorMessageVisible() {
+        return await this.errorMessage.isVisible();
     }
+
 }
-BasePage.registerSubclass(AccountPage);
