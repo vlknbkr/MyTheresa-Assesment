@@ -19,9 +19,7 @@ export class GithubPrService {
     this.repo = repo;
   }
 
-  /**
-   * Fetches all open pull requests from GitHub API with pagination
-   */
+  //Fetches all open pull requests from GitHub API with pagination
   async getAllOpenPullRequests(): Promise<PullRequestInfo[]> {
     const allPullRequests: PullRequestInfo[] = [];
     let page = 1;
@@ -31,7 +29,7 @@ export class GithubPrService {
 
       const response = await this.request.get(url, {
         headers: {
-          "User-Agent": "playwright-mytheresa-challenge", 
+          "User-Agent": "playwright-mytheresa-challenge",
           Accept: "application/vnd.github+json"
         }
       });
@@ -48,16 +46,15 @@ export class GithubPrService {
         break; // Exit loop if no more data return empty
       }
 
-      // Add PRs to the result array
       allPullRequests.push(
         ...(data as any[]).map((pr) => ({
           title: pr.title,
           createdAt: pr.created_at,
-          author: pr.user?.login ?? "unknown" 
+          author: pr.user?.login ?? "unknown"
         }))
       );
 
-      page++; 
+      page++;
     }
 
     return allPullRequests;

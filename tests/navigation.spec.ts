@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { BasePage } from "../src/core/BasePage";
-import "../src/pages/HomePage";
-import "../src/pages/AboutPage";
-import "../src/pages/AccountPage";
-import "../src/pages/ClothingPage";
-import "../src/pages/ShoppingBagPage";
+import { HomePage } from "../src/pages/HomePage";
+import { AboutPage } from "../src/pages/AboutPage";
+import { AccountPage } from "../src/pages/AccountPage";
+import { ClothingPage } from "../src/pages/ClothingPage";
+import { ShoppingCartPage } from "../src/pages/ShoppingBagPage";
 
 interface ConsoleError {
     pageName: string;
@@ -12,31 +12,43 @@ interface ConsoleError {
     type: string;
 }
 
+
 test("Test Case 1: No console errors across main navigation flow", async ({ page }) => {
     const consoleErrors: ConsoleError[] = [];
     let currentPageName = "Unknown";
 
-    // console error listener 
+    // Open the console error listener 
     page.on("console", (msg) => {
         if (msg.type() === "error") {
+            const text = msg.text();
             consoleErrors.push({
                 pageName: currentPageName,
-                message: msg.text(),
+                message: text,
                 type: msg.type(),
             });
         }
     });
 
-    let index = 0;
+    const pages: BasePage[] = [
+        new HomePage(page),
+        new AboutPage(page),
+        new AccountPage(page),
+        new ClothingPage(page),
+        new ShoppingCartPage(page)
+    ];
 
-    for (const PageClass of BasePage.subclasses) {
-        const instance = new PageClass(page);
-        currentPageName = PageClass.name; //to get page name for logging
+    // Initial load
+    await test.step("Start Navigation Session", async () => {
+        await pages[0].open();
+    });
 
-        index === 0 && await instance.open(); //to control the open() for each page instance
-        await instance.clickHeaderItem(); //clicking corresponding header item
-        await page.waitForLoadState("load");
-        index++;
+    for (const instance of pages) {
+        currentPageName = instance.constructor.name;
+
+        await test.step(`Navigate to ${currentPageName}`, async () => {
+            await instance.clickHeaderItem();
+            await page.waitForLoadState("load");
+        });
     }
     const pagesWithErrors = Array.from(
         new Set(consoleErrors.map((e) => e.pageName))
